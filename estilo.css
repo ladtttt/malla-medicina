@@ -1,0 +1,131 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Medicina Interactiva</title>
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+  <h1>Malla Curricular de Medicina</h1>
+  <div class="contenedor">
+
+    <div class="semestre">
+      <h2>Semestre 1</h2>
+      <button id="MED121">Historia de la Medicina</button>
+      <button id="MED124">Anatomía</button>
+      <button id="MED125">Prácticas Lab. Anatomía</button>
+      <button id="MED218">Inglés Médico</button>
+      <button id="MED137">Biología Celular</button>
+      <button id="MED138">Prácticas Lab. Biología Celular</button>
+      <button id="MED139">Embriología e Histología Humana</button>
+      <button id="MED140">Prácticas Lab. Embriología e Histología</button>
+      <button id="CMU121">Habilidades Lingüísticas</button>
+    </div>
+
+    <div class="semestre">
+      <h2>Semestre 2</h2>
+      <button id="CSC244" data-prereq="CMU121">Metodología de la Investigación</button>
+      <button id="ADM244">Ética</button>
+      <button id="MED291" data-prereq="MED137,MED139">Biología Molecular</button>
+      <button id="MED161">Bioestadística</button>
+      <button id="MED163" data-prereq="MED139">Bioquímica</button>
+      <button id="MED165" data-prereq="MED124">Neuroanatomía</button>
+      <button id="LAB291">Prácticas Lab. Biología Molecular</button>
+      <button id="LAB165">Prácticas Lab. Neuroanatomía</button>
+      <button id="LAB163">Prácticas Lab. Bioquímica</button>
+    </div>
+
+    <div class="semestre">
+      <h2>Semestre 3</h2>
+      <button id="MED216" data-prereq="ADM244">Bioética</button>
+      <button id="MED217" data-prereq="MED161">Epidemiología</button>
+      <button id="MED335" data-prereq="MED161,MED218">Investigación en Ciencias de la Salud</button>
+      <button id="AMB171" data-prereq="CSC244,ADM244">Desarrollo Sostenible</button>
+      <button id="MED292" data-prereq="MED165">Fisiología</button>
+      <button id="MED293" data-prereq="MED165,MED291">Microbiología 1</button>
+      <button id="LAB293">Prácticas Lab. Microbiología 1</button>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+/* estilo.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+}
+
+.contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.semestre {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  width: 300px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.semestre h2 {
+  text-align: center;
+  color: #2980b9;
+}
+
+button {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+button.aprobado {
+  text-decoration: line-through;
+  background-color: #2ecc71;
+}
+
+// script.js
+function actualizarEstado() {
+  document.querySelectorAll("button").forEach(btn => {
+    const prereq = btn.dataset.prereq;
+    if (prereq) {
+      const ids = prereq.split(',');
+      const habilitado = ids.every(id => document.getElementById(id)?.classList.contains("aprobado"));
+      btn.disabled = !habilitado;
+    }
+  });
+}
+
+document.querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    btn.classList.toggle("aprobado");
+    actualizarEstado();
+  });
+});
+
+window.onload = actualizarEstado;
